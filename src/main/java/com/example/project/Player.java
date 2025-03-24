@@ -1,12 +1,15 @@
 package com.example.project;
 
 //DO NOT DELETE ANY METHODS BELOW
-public class Player  {
+public class Player extends Sprite {
     private int treasureCount;
     private int numLives;
     private boolean win;
 
     public Player(int x, int y) { //set treasureCount = 0 and numLives = 2 
+        super(x, y);
+        treasureCount = 0;
+        numLives = 2;
     }
 
 
