@@ -53,6 +53,34 @@ public class Game{
     }
 
     public static void main(String[] args) {
+        int size = 10;
+        grid = new Grid(size);
+        player = new Player(0, 0);
+        enemy = new Enemy(5, 5);
+        enemy2 = new Enemy(7,8);
+        treasure = new Treasure(2, 2);
+        treasure2 = new Treasure(1,7);
+        trophy = new Trophy(9, 9);
+
+        // Row 0: [ ][ ][ ][ ][ ][ ][ ][ ][ ][W]
+        // Row 1: [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        // Row 2: [ ][T][ ][ ][ ][ ][ ][E][ ][ ]
+        // Row 3: [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        // Row 4: [ ][ ][ ][ ][ ][E][ ][ ][ ][ ]
+        // Row 5: [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        // Row 6: [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        // Row 7: [ ][ ][T][ ][ ][ ][ ][ ][ ][ ]
+        // Row 8: [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        // Row 9: [P][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        //         0  1  2  3  4  5  6  7  8  9
+
+        // Place objects on the grid
+        grid.placeSprite(player);
+        grid.placeSprite(enemy);
+        grid.placeSprite(enemy2);
+        grid.placeSprite(treasure);
+        grid.placeSprite(treasure2);
+        grid.placeSprite(trophy);
         
     }
 }

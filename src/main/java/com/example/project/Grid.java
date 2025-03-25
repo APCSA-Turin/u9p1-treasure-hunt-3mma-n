@@ -26,19 +26,22 @@ public class Grid{
     }
 
     public void placeSprite(Sprite s, String direction) { //place sprite in a new spot based on direction
-        // NOT FUNCTIONAL YET
-        temp = grid[grid.length - s.getY() - 1][s.getX()];
+        int row = grid.length - s.getY() - 1;
+        int col = s.getX();
+        grid[row][col] = new Dot();
         if (direction.equals("d")) {
-            s.setX(s.getX() + 1);
+            // s.setX(s.getX() + 1);
+            grid[row][col + 1] = s;
         } else if (direction.equals("a")) {
-            s.setX(s.getX() - 1);
+            // s.setX(s.getX() - 1);
+            grid[row][col - 1] = s;
         } else if (direction.equals("w")) {
-            s.setY(s.getY() + 1);
+            // s.setY(s.getY() + 1);
+            grid[row - 1][col] = s;
         } else if (direction.equals("s")){
-            s.setY(s.getY() - 1);
+            // s.setY(s.getY() - 1);
+            grid[row + 1][col] = s;
         }
-
-        
     }
 
 
