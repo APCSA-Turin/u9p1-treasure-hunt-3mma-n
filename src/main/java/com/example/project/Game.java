@@ -10,6 +10,8 @@ public class Game{
     private int size; 
 
     public Game(int size){ //the constructor should call initialize() and play()
+        initialize();
+        play();
     }
 
     public static void clearScreen() { //do not modify
@@ -47,40 +49,28 @@ public class Game{
     }
 
     public void initialize(){
-
         //to test, create a player, trophy, grid, treasure, and enemies. Then call placeSprite() to put them on the grid
-   
+        grid = new Grid(8);
+        player = new Player(1, 1);
+
+        enemies = new Enemy[2];
+        enemies[0] = new Enemy(3, 4);
+        enemies[1] = new Enemy(5, 0);
+        grid.placeSprite(player);
+        for (Enemy each : enemies) {
+            grid.placeSprite(each);
+        }
+
+        treasures = new Treasure[2];
+        treasures[0] = new Treasure(4, 1);
+        treasures[1] = new Treasure(0, 7);
+        for (Treasure each : treasures) {
+            grid.placeSprite(each);
+        }
+        grid.placeSprite(new Trophy(6, 6));
     }
 
     public static void main(String[] args) {
-        int size = 10;
-        grid = new Grid(size);
-        player = new Player(0, 0);
-        enemy = new Enemy(5, 5);
-        enemy2 = new Enemy(7,8);
-        treasure = new Treasure(2, 2);
-        treasure2 = new Treasure(1,7);
-        trophy = new Trophy(9, 9);
-
-        // Row 0: [ ][ ][ ][ ][ ][ ][ ][ ][ ][W]
-        // Row 1: [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
-        // Row 2: [ ][T][ ][ ][ ][ ][ ][E][ ][ ]
-        // Row 3: [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
-        // Row 4: [ ][ ][ ][ ][ ][E][ ][ ][ ][ ]
-        // Row 5: [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
-        // Row 6: [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
-        // Row 7: [ ][ ][T][ ][ ][ ][ ][ ][ ][ ]
-        // Row 8: [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
-        // Row 9: [P][ ][ ][ ][ ][ ][ ][ ][ ][ ]
-        //         0  1  2  3  4  5  6  7  8  9
-
-        // Place objects on the grid
-        grid.placeSprite(player);
-        grid.placeSprite(enemy);
-        grid.placeSprite(enemy2);
-        grid.placeSprite(treasure);
-        grid.placeSprite(treasure2);
-        grid.placeSprite(trophy);
-        
+        Game myGame = new Game(8);
     }
 }

@@ -20,16 +20,43 @@ public class Player extends Sprite {
   
     //move method should override parent class, sprite
     public void move(String direction) { //move the (x,y) coordinates of the player
+        if (direction.equals("d")) {setX(getX() + 1);}
+        else if (direction.equals("a")) {setX(getX() - 1);} 
+        else if (direction.equals("w")) {setY(getY() + 1);} 
+        else if (direction.equals("s")) {setY(getY() - 1);}
     }
 
 
     public void interact(int size, String direction, int numTreasures, Object obj) { // interact with an object in the position you are moving to 
-    //numTreasures is the total treasures at the beginning of the game
+        //numTreasures is the total treasures at the beginning of the game
+        if (obj instanceof Enemy) {
+            numLives--;
+        } else if (obj instanceof Treasure) {
+            if (obj instanceof Trophy) {
+                if (treasureCount == numTreasures) {
+                    win = true;
+                }
+            } else {
+                treasureCount++;
+            }
+        }
+
     }
 
-
     public boolean isValid(int size, String direction){ //check grid boundaries
-        return false;
+        if (direction.equals("d") && getX() == size - 1) {return false;}
+        if (direction.equals("a") && getX() == 0) {return false;}
+        if (direction.equals("w") && getY() == size - 1) {return false;}
+        if (direction.equals("s") && getY() == 0) {return false;}
+        return true;
+    }
+
+    public String getRowCol(int size){ //return "Player:"+row col
+        return "Player:" + super.getRowCol(size);
+    }
+
+    public String getCoords(){ //returns "Enemy:"+coordinates
+        return "Player:" + super.getCoords();
     }
 
 
