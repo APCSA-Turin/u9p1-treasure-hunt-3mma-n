@@ -31,9 +31,7 @@ public class Game{
     }
 
     public void play(){ //write your game logic here
-        Scanner scanner = new Scanner(System.in);
-
-
+        Scanner sc = new Scanner(System.in);
         while(true){
             try {
                 Thread.sleep(100); // Wait for 1/10 seconds
@@ -41,9 +39,13 @@ public class Game{
                 e.printStackTrace();
             }
             clearScreen(); // Clear the screen at the beggining of the while loop
-
-     
+            grid.display();
+            System.out.print("Enter Move Direction (WASD): ");
+            String direction = sc.nextLine();
+            if (player.isValid(size, direction)) {
+                // player.interact(size, direction, treasures.length);
             }
+        }
             
      
     }
