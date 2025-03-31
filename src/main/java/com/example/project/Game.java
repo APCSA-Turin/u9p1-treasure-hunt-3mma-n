@@ -10,7 +10,7 @@ public class Game{
     private int size; 
 
     public Game(int size){ //the constructor should call initialize() and play()
-        initialize();
+        initialize(size);
         play();
     }
 
@@ -32,27 +32,58 @@ public class Game{
 
     public void play(){ //write your game logic here
         Scanner sc = new Scanner(System.in);
+        clearScreen();
+        grid.display();
         while(true){
-            try {
-                Thread.sleep(100); // Wait for 1/10 seconds
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            clearScreen(); // Clear the screen at the beggining of the while loop
-            grid.display();
+            // try {
+            //     Thread.sleep(100); // Wait for 1/10 seconds
+            // } catch (InterruptedException e) {
+            //     e.printStackTrace();
+            // }
+            System.out.println(player.getCoords() + "  Lives:" + player.getLives());
             System.out.print("Enter Move Direction (WASD): ");
             String direction = sc.nextLine();
             if (player.isValid(size, direction)) {
-                // player.interact(size, direction, treasures.length);
+                Sprite target = grid.getInDirection(player, direction);
+                player.interact(size, direction, treasures.length, target);
+                if (!(target instanceof Enemy) && (!(target instanceof Trophy) || player.getTreasureCount() == treasures.length)) {
+                    player.move(direction);
+                    grid.placeSprite(player, direction);
+                    clearScreen();
+                    grid.display();
+                    if (target instanceof Trophy) {
+                        grid.win();
+                        break;
+                    } else if (target instanceof Treasure) {
+                        System.out.println("Obtained 1 Treasure! (" + player.getTreasureCount() + "/" + treasures.length + ")");
+                    }
+                } else {
+                    clearScreen();
+                    grid.display();
+                    if (target instanceof Enemy) {
+                        System.out.println("You've been hit by an enemy! " + player.getLives() + " lives remain.");
+                        if (player.getLives() <= 0) {
+                            grid.gameover();
+                            break;
+                        }
+                    } else {
+                        System.out.println("You must collect all " + treasures.length + " treasures to claim the trophy.");
+                    }
+                }
+            } else {
+                clearScreen();
+                grid.display();
+                System.out.println("You cannot move that way.");
             }
         }
             
      
     }
 
-    public void initialize(){
+    public void initialize(int size){
         //to test, create a player, trophy, grid, treasure, and enemies. Then call placeSprite() to put them on the grid
-        grid = new Grid(8);
+        this.size = size;
+        grid = new Grid(size);
         player = new Player(1, 1);
 
         enemies = new Enemy[2];

@@ -75,11 +75,25 @@ public class Grid{
         str += border;
         System.out.println(str);
     }
+
+    public Sprite getInDirection(Sprite sp, String direction) {
+        int x = sp.getX();
+        int y = sp.getY();
+        if (direction.equals("d")) {x++;}
+        else if (direction.equals("a")) {x--;}
+        else if (direction.equals("w")) {y++;}
+        else if (direction.equals("s")) {y--;}
+        return grid[grid.length - y - 1][x];
+    }
     
     public void gameover(){ //use this method to display a loss
+        System.out.println("You have run out of lives!");
+        System.out.println("Better luck next time...");
     }
 
-    public void win(){ //use this method to display a win 
+    public void win(){ //use this method to display a win
+        System.out.println("You have collected all the treasure and reahed the trophy!");
+        System.out.println("Congratulations traveler!");
     }
 
 
