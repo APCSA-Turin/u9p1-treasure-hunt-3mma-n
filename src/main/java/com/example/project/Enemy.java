@@ -20,29 +20,48 @@ public class Enemy extends Sprite { //child  of Sprite
         return "Enemy:" + super.getRowCol(size);
     }
 
-    public String move(Player p) {
+    public void move(String direction) { //move the (x,y) coordinates of the player
+        // changes the player x or y based on the inputted direction
+        if (direction.equals("d")) {setX(getX() + 1);}
+        else if (direction.equals("a")) {setX(getX() - 1);} 
+        else if (direction.equals("w")) {setY(getY() + 1);} 
+        else if (direction.equals("s")) {setY(getY() - 1);}
+    }
+
+    public String followPlayer(Player p, Grid grid) {
         int xDif = getX() - p.getX();
         int yDif = getY() - p.getY();
         if (Math.abs(xDif) + Math.abs(yDif) == 1) {
             p.loseLife();
             return "";
         }
-        else if (Math.abs(xDif) > Math.abs(yDif)) {
+
+        String direction;
+
+        if (Math.abs(xDif) > Math.abs(yDif)) {
             if (xDif > 0) {
-                setX(getX() - 1);
-                return "a";
+                direction = "a";
             } else {
                 setX(getX() + 1);
-                return "d";
+                direction = "d";
             }
-        } else {
-            if (yDif > 0) {
-                setY(getY() - 1);
-                return "s";
-            } else {
-                setY(getY() + 1);
-                return "w";
+            Sprite target = grid.getInDirection(this, direction);
+            if (target instanceof Dot) {
+                move(direction);
+                return direction;
             }
         }
+
+        if (yDif > 0) {
+            direction = "s";
+        } else {
+            direction = "w";
+        }
+        Sprite target = grid.getInDirection(this, direction);
+        if (target instanceof Dot) {
+            move(direction);
+            return direction;
+        }
+        return "";
     }
 }

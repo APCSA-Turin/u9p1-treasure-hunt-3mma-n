@@ -32,21 +32,27 @@ public class Game{
 
     public void play(){ //write your game logic here
         Scanner sc = new Scanner(System.in);
+        int turn = 0;
         clearScreen();
         grid.display();
         // iterates until the loop is broken
         while(true){
+            turn++;
+            System.out.println("Enemy Move Charge: " + turn + "/3");
             // prints the player's coordinates and lives (after the grid is displayed)
             System.out.println(player.getCoords() + "  Lives:" + player.getLives());
             // prompts the user to enter a direction and saves it to a variable
             System.out.print("Enter Move Direction (WASD): ");
             String direction = sc.nextLine();
 
-            // for (Enemy e : enemies) {
-            //     String d = e.move(player);
-            //     // System.out.println(e.getCoords() + " " + d);
-            //     grid.placeSprite(e, d);
-            // }
+            if (turn > 2) {
+                for (Enemy e : enemies) {
+                    String d = e.followPlayer(player, grid);
+                    // System.out.println(e.getCoords() + " " + d);
+                        grid.placeSprite(e, d);
+                }
+                turn = 1;
+            }
 
             // only tries to move if the player wouldn't leave bounds
             if (player.isValid(size, direction)) {
