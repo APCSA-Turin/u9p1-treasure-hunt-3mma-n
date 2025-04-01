@@ -34,23 +34,36 @@ public class Game{
         Scanner sc = new Scanner(System.in);
         clearScreen();
         grid.display();
+        // iterates until the loop is broken
         while(true){
-            // try {
-            //     Thread.sleep(100); // Wait for 1/10 seconds
-            // } catch (InterruptedException e) {
-            //     e.printStackTrace();
-            // }
+            // prints the player's coordinates and lives (after the grid is displayed)
             System.out.println(player.getCoords() + "  Lives:" + player.getLives());
+            // prompts the user to enter a direction and saves it to a variable
             System.out.print("Enter Move Direction (WASD): ");
             String direction = sc.nextLine();
+
+            // for (Enemy e : enemies) {
+            //     String d = e.move(player);
+            //     // System.out.println(e.getCoords() + " " + d);
+            //     grid.placeSprite(e, d);
+            // }
+
+            // only tries to move if the player wouldn't leave bounds
             if (player.isValid(size, direction)) {
+                // obtains the sprite the player would be moving into
                 Sprite target = grid.getInDirection(player, direction);
+                // runs the player interaction with the sprite at their move location
                 player.interact(size, direction, treasures.length, target);
+
+                // checks if the sprite will be replaced by the player or if the player will not move
                 if (!(target instanceof Enemy) && (!(target instanceof Trophy) || player.getTreasureCount() == treasures.length)) {
+                    // moves and places the player then resets the screen 
                     player.move(direction);
                     grid.placeSprite(player, direction);
                     clearScreen();
                     grid.display();
+
+                    // displays a message based on what the player interacted with
                     if (target instanceof Trophy) {
                         grid.win();
                         break;
@@ -58,8 +71,11 @@ public class Game{
                         System.out.println("Obtained 1 Treasure! (" + player.getTreasureCount() + "/" + treasures.length + ")");
                     }
                 } else {
+                    // resets the screen
                     clearScreen();
                     grid.display();
+
+                    // displays a message based on what the player interacted with
                     if (target instanceof Enemy) {
                         System.out.println("You've been hit by an enemy! " + player.getLives() + " lives remain.");
                         if (player.getLives() <= 0) {
@@ -71,6 +87,7 @@ public class Game{
                     }
                 }
             } else {
+                // resets the screen and displays a message (runs if the player tries to move out of bounds)
                 clearScreen();
                 grid.display();
                 System.out.println("You cannot move that way.");
@@ -81,25 +98,28 @@ public class Game{
     }
 
     public void initialize(int size){
-        //to test, create a player, trophy, grid, treasure, and enemies. Then call placeSprite() to put them on the grid
+        // initializes the grid and places the player
         this.size = size;
         grid = new Grid(size);
         player = new Player(1, 1);
+        grid.placeSprite(player);
 
+        // creates new enemies and places them on the board
         enemies = new Enemy[2];
         enemies[0] = new Enemy(3, 4);
         enemies[1] = new Enemy(5, 0);
-        grid.placeSprite(player);
         for (Enemy each : enemies) {
             grid.placeSprite(each);
         }
 
+        // creates new treasures and places them on the board
         treasures = new Treasure[2];
         treasures[0] = new Treasure(4, 1);
         treasures[1] = new Treasure(0, 7);
         for (Treasure each : treasures) {
             grid.placeSprite(each);
         }
+        // adds the trophy to the board
         grid.placeSprite(new Trophy(6, 6));
     }
 

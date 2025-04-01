@@ -19,4 +19,30 @@ public class Enemy extends Sprite { //child  of Sprite
     public String getRowCol(int size){ //return "Enemy:"+row col
         return "Enemy:" + super.getRowCol(size);
     }
+
+    public String move(Player p) {
+        int xDif = getX() - p.getX();
+        int yDif = getY() - p.getY();
+        if (Math.abs(xDif) + Math.abs(yDif) == 1) {
+            p.loseLife();
+            return "";
+        }
+        else if (Math.abs(xDif) > Math.abs(yDif)) {
+            if (xDif > 0) {
+                setX(getX() - 1);
+                return "a";
+            } else {
+                setX(getX() + 1);
+                return "d";
+            }
+        } else {
+            if (yDif > 0) {
+                setY(getY() - 1);
+                return "s";
+            } else {
+                setY(getY() + 1);
+                return "w";
+            }
+        }
+    }
 }
