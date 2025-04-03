@@ -42,7 +42,6 @@ public class Enemy extends Sprite { //child  of Sprite
             if (xDif > 0) {
                 direction = "a";
             } else {
-                setX(getX() + 1);
                 direction = "d";
             }
             Sprite target = grid.getInDirection(this, direction);

@@ -29,7 +29,9 @@ public class Grid{
         
         int row = grid.length - s.getY() - 1;
         int col = s.getX();
-        grid[row][col] = s;
+        if (direction != "") {
+            grid[row][col] = s;
+        }
         if (direction.equals("d")) {
             grid[row][col - 1] = new Dot(s.getX() - 1, s.getY());
         } else if (direction.equals("a")) {

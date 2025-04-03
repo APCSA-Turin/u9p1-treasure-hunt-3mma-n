@@ -32,12 +32,11 @@ public class Game{
 
     public void play(){ //write your game logic here
         Scanner sc = new Scanner(System.in);
-        int turn = 0;
+        int turn = 1;
         clearScreen();
         grid.display();
         // iterates until the loop is broken
         while(true){
-            turn++;
             System.out.println("Enemy Move Charge: " + turn + "/3");
             // prints the player's coordinates and lives (after the grid is displayed)
             System.out.println(player.getCoords() + "  Lives:" + player.getLives());
@@ -45,16 +44,8 @@ public class Game{
             System.out.print("Enter Move Direction (WASD): ");
             String direction = sc.nextLine();
 
-            if (turn > 2) {
-                for (Enemy e : enemies) {
-                    String d = e.followPlayer(player, grid);
-                    // System.out.println(e.getCoords() + " " + d);
-                        grid.placeSprite(e, d);
-                }
-                turn = 1;
-            }
-
             // only tries to move if the player wouldn't leave bounds
+            String message = "";
             if (player.isValid(size, direction)) {
                 // obtains the sprite the player would be moving into
                 Sprite target = grid.getInDirection(player, direction);
@@ -63,41 +54,48 @@ public class Game{
 
                 // checks if the sprite will be replaced by the player or if the player will not move
                 if (!(target instanceof Enemy) && (!(target instanceof Trophy) || player.getTreasureCount() == treasures.length)) {
-                    // moves and places the player then resets the screen 
+                    // moves and places the player
                     player.move(direction);
                     grid.placeSprite(player, direction);
-                    clearScreen();
-                    grid.display();
 
                     // displays a message based on what the player interacted with
                     if (target instanceof Trophy) {
                         grid.win();
                         break;
                     } else if (target instanceof Treasure) {
-                        System.out.println("Obtained 1 Treasure! (" + player.getTreasureCount() + "/" + treasures.length + ")");
+                        message = "Obtained 1 Treasure! (" + player.getTreasureCount() + "/" + treasures.length + ")";
                     }
                 } else {
-                    // resets the screen
-                    clearScreen();
-                    grid.display();
-
                     // displays a message based on what the player interacted with
                     if (target instanceof Enemy) {
-                        System.out.println("You've been hit by an enemy! " + player.getLives() + " lives remain.");
+                        message = "You've been hit by an enemy! " + player.getLives() + " lives remain.";
                         if (player.getLives() <= 0) {
                             grid.gameover();
                             break;
                         }
                     } else {
-                        System.out.println("You must collect all " + treasures.length + " treasures to claim the trophy.");
+                        message = "You must collect all " + treasures.length + " treasures to claim the trophy.";
                     }
                 }
             } else {
-                // resets the screen and displays a message (runs if the player tries to move out of bounds)
-                clearScreen();
-                grid.display();
-                System.out.println("You cannot move that way.");
+                // displays a message (runs if the player tries to move out of bounds)
+                message = "You cannot move that way.";
             }
+            turn++;
+            if (turn > 3) {
+                for (Enemy e : enemies) {
+                    String d = e.followPlayer(player, grid);
+                    // System.out.println(e.getCoords() + " " + d);
+                    grid.placeSprite(e, d);
+                }
+                turn = 1;
+            }
+            clearScreen();
+            grid.display();
+            if (!message.equals("")) {
+                System.out.println(message);
+            }
+
         }
             
      
