@@ -35,31 +35,29 @@ public class Enemy extends Sprite { //child  of Sprite
             p.loseLife();
             return "";
         }
-
-        String direction;
-
-        if (Math.abs(xDif) > Math.abs(yDif)) {
-            if (xDif > 0) {
-                direction = "a";
-            } else {
-                direction = "d";
-            }
-            Sprite target = grid.getInDirection(this, direction);
-            if (target instanceof Dot) {
-                move(direction);
-                return direction;
-            }
-        }
-
-        if (yDif > 0) {
-            direction = "s";
+        String xDirection;
+        String yDirection;
+        if (xDif > 0) {
+            xDirection = "a";
         } else {
-            direction = "w";
+            xDirection = "d";
         }
-        Sprite target = grid.getInDirection(this, direction);
-        if (target instanceof Dot) {
-            move(direction);
-            return direction;
+        if (yDif > 0) {
+            yDirection = "s";
+        } else {
+            yDirection = "w";
+        }
+        Sprite xTarget = grid.getInDirection(this, xDirection);
+        Sprite yTarget = grid.getInDirection(this, yDirection);
+
+        // changes x if thats closer to the players direction
+        if ((Math.abs(xDif) > Math.abs(yDif) || !(yTarget instanceof Dot)) && xTarget instanceof Dot) {
+            move(xDirection);
+            return xDirection;
+        }
+        if (yTarget instanceof Dot) {
+            move(yDirection);
+            return yDirection;
         }
         return "";
     }

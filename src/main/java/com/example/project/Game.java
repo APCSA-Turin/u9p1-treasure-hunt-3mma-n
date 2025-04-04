@@ -33,8 +33,6 @@ public class Game{
     public void play(){ //write your game logic here
         Scanner sc = new Scanner(System.in);
         int turn = 1;
-        clearScreen();
-        grid.display();
         // iterates until the loop is broken
         while(true){
             System.out.println("Enemy Move Charge: " + turn + "/3");
@@ -61,7 +59,12 @@ public class Game{
                     // displays a message based on what the player interacted with
                     if (target instanceof Trophy) {
                         grid.win();
-                        break;
+                        System.out.print("Would you like to play again? (y/n) ");
+                        if (!sc.nextLine().equals("y")) {
+                            break;
+                        }
+                        initialize(size);
+                        turn = 1;
                     } else if (target instanceof Treasure) {
                         message = "Obtained 1 Treasure! (" + player.getTreasureCount() + "/" + treasures.length + ")";
                     }
@@ -69,10 +72,6 @@ public class Game{
                     // displays a message based on what the player interacted with
                     if (target instanceof Enemy) {
                         message = "You've been hit by an enemy! " + player.getLives() + " lives remain.";
-                        if (player.getLives() <= 0) {
-                            grid.gameover();
-                            break;
-                        }
                     } else {
                         message = "You must collect all " + treasures.length + " treasures to claim the trophy.";
                     }
@@ -95,10 +94,18 @@ public class Game{
             if (!message.equals("")) {
                 System.out.println(message);
             }
+            if (player.getLives() <= 0) {
+                grid.gameover();
+                System.out.print("Would you like to play again? (y/n) ");
+                if (!sc.nextLine().equals("y")) {
+                    break;
+                }
+                initialize(size);
+                turn = 1;
+            }
 
         }
-            
-     
+        sc.close(); 
     }
 
     public void initialize(int size){
@@ -125,7 +132,18 @@ public class Game{
         }
         // adds the trophy to the board
         grid.placeSprite(new Trophy(6, 6));
+        clearScreen();
+        grid.display();
     }
+
+    // public void randomizeBoard(int numEnemies, int numTreasures) {
+    //     enemies = new Enemy[numEnemies];
+    //     treasures = new Treasure[numTreasures];
+    //     for (int i = 0; i < numEnemies; i++) {
+    //         int row = Math.randInt()
+    //     }
+    // }
+
 
     public static void main(String[] args) {
         Game myGame = new Game(8);
