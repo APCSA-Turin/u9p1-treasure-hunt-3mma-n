@@ -33,6 +33,7 @@ public class Enemy extends Sprite { //child  of Sprite
         int yDif = getY() - p.getY();
         if (Math.abs(xDif) + Math.abs(yDif) == 1) {
             p.loseLife();
+            
             return "";
         }
         String xDirection;
