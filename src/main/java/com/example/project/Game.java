@@ -47,17 +47,17 @@ public class Game{
                 int temp = player.getLives();
                 // moves and places each enemy on the grid
                 for (Enemy e : enemies) {
-                    String d = e.followPlayer(player, grid);
-                    // System.out.println(e.getCoords() + " " + d);
-                    grid.placeSprite(e, d);
-
+                    for (int i = 0; i < e.getMoveDist(); i++) {
+                        String d = e.followPlayer(player, grid);
+                        grid.placeSprite(e, d);
+                    }
                 }
                 // checks whether the players lives has decreased this turn
                 if (player.getLives() < temp) {
                     message = "You've been hit! " + player.getLives() + " lives remain.";
                 }
                 System.out.print("Press Enter to Continue. ");
-                String direction = sc.nextLine();
+                sc.nextLine();
 
             } else {
                 System.out.println("Enemy Move Charge: " + turn + "/3");
@@ -126,6 +126,7 @@ public class Game{
             }
 
         }
+        System.out.println("Come again soon!");
         sc.close(); 
     }
 
@@ -135,24 +136,27 @@ public class Game{
         grid = new Grid(size);
         player = new Player(1, 1);
         grid.placeSprite(player);
+        randomizeBoard(3, 2);
 
-        // creates new enemies and places them on the board
-        enemies = new Enemy[2];
-        enemies[0] = new Enemy(3, 4);
-        enemies[1] = new Enemy(5, 0);
-        for (Enemy each : enemies) {
-            grid.placeSprite(each);
-        }
+        // // creates new enemies and places them on the board
+        // enemies = new Enemy[2];
+        // enemies[0] = new Enemy(3, 4);
+        // enemies[1] = new Enemy(5, 0, 2);
+        // for (Enemy each : enemies) {
+        //     grid.placeSprite(each);
+        // }
 
-        // creates new treasures and places them on the board
-        treasures = new Treasure[2];
-        treasures[0] = new Treasure(4, 1);
-        treasures[1] = new Treasure(0, 7);
-        for (Treasure each : treasures) {
-            grid.placeSprite(each);
-        }
-        // adds the trophy to the board
-        grid.placeSprite(new Trophy(6, 6));
+
+        // // creates new treasures and places them on the board
+        // treasures = new Treasure[2];
+        // treasures[0] = new Treasure(4, 1);
+        // treasures[1] = new Treasure(0, 7);
+        // for (Treasure each : treasures) {
+        //     grid.placeSprite(each);
+        // }
+        // // adds the trophy to the board
+        // grid.placeSprite(new Trophy(6, 6));
+
         clearScreen();
         grid.display();
     }
@@ -161,13 +165,40 @@ public class Game{
         message = n;
     }
 
-    // public void randomizeBoard(int numEnemies, int numTreasures) {
-    //     enemies = new Enemy[numEnemies];
-    //     treasures = new Treasure[numTreasures];
-    //     for (int i = 0; i < numEnemies; i++) {
-    //         int row = Math.randInt()
-    //     }
-    // }
+    public void randomizeBoard(int numEnemies, int numTreasures) {
+        enemies = new Enemy[numEnemies];
+        treasures = new Treasure[numTreasures];
+        for (int i = 0; i < numEnemies; i++) {
+            int row = (int) (Math.random() * size);
+            int col = (int) (Math.random() * size);
+            while (!(grid.getGrid()[row][col] instanceof Dot)) {
+                row = (int) (Math.random() * size);
+                col = (int) (Math.random() * size);
+            } 
+            if (i == 0) {
+                enemies[i] = new Enemy(size - row - 1, col, 2);
+            } else {
+                enemies[i] = new Enemy(size - row - 1, col);
+            }
+            grid.placeSprite(enemies[i]);
+        }
+
+        for (int i = 0; i <= numTreasures; i++) {
+            int row = (int) (Math.random() * size);
+            int col = (int) (Math.random() * size);
+            while (!(grid.getGrid()[row][col] instanceof Dot)) {
+                row = (int) (Math.random() * size);
+                col = (int) (Math.random() * size);
+            } 
+            if (i == numTreasures) {
+                trophy = new Trophy(size - row - 1, col);
+                grid.placeSprite(trophy);
+            } else {
+                treasures[i] = new Treasure(size - row - 1, col);
+                grid.placeSprite(treasures[i]);
+            }
+        }
+    }
 
 
     public static void main(String[] args) {

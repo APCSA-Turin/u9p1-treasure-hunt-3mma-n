@@ -3,8 +3,16 @@ package com.example.project;
 //Enemy only need constructor and getCoords() getRowCol()
 public class Enemy extends Sprite { //child  of Sprite
     
+    private int moveDist;
+
     public Enemy(int x, int y) {
         super(x, y);
+        moveDist = 1;
+    }
+
+    public Enemy(int x, int y, int m) {
+        super(x, y);
+        moveDist = m;
     }
 
 
@@ -61,5 +69,9 @@ public class Enemy extends Sprite { //child  of Sprite
             return yDirection;
         }
         return "";
+    }
+
+    public int getMoveDist() {
+        return moveDist;
     }
 }

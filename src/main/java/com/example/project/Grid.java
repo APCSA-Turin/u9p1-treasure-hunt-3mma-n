@@ -45,6 +45,10 @@ public class Grid{
 
 
     public void display() { //print out the current grid to the screen 
+        System.out.println("-------- Key --------");
+        System.out.println("P: Player, 1 or 2: Enemy");
+        System.out.println("T: Treasure, W: Win Tile");
+        System.out.println("Collect Treasures and Reach the Win Tile");
         String str = "";
         String border = "";
         for(int i = 0; i < (grid[0].length * 3) + 4; i++) {
@@ -59,7 +63,7 @@ public class Grid{
                 if (grid[i][j] instanceof Player) {
                     str += "P";
                 } else if (grid[i][j] instanceof Enemy) {
-                    str += "E";
+                    str += ((Enemy)grid[i][j]).getMoveDist();
                 } else if (grid[i][j] instanceof Trophy) {
                     str += "W";
                 } else if (grid[i][j] instanceof Treasure) {
