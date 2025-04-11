@@ -2,6 +2,7 @@ package com.example.project;
 import java.util.Scanner;
 
 public class Game{
+    private static Scanner sc = new Scanner(System.in);
     private Grid grid;
     private Player player;
     private Enemy[] enemies;
@@ -32,7 +33,6 @@ public class Game{
     }
 
     public void play(){ //write your game logic here
-        Scanner sc = new Scanner(System.in);
         int turn = -1;
         // iterates until the loop is broken
         while(true){
@@ -56,7 +56,7 @@ public class Game{
                 if (player.getLives() < temp) {
                     message = "You've been hit! " + player.getLives() + " lives remain.";
                 }
-                System.out.print("Press Enter to Continue. ");
+                System.out.print("(Press Enter to Continue) ");
                 sc.nextLine();
 
             } else {
@@ -85,12 +85,7 @@ public class Game{
                             clearScreen();
                             grid.display();
                             grid.win();
-                            System.out.print("Would you like to play again? (y/n) ");
-                            if (!sc.nextLine().equals("y")) {
-                                break;
-                            }
-                            initialize(size);
-                            turn = 1;
+                            break;
                         } else if (target instanceof Treasure) {
                             message = "Obtained 1 Treasure! (" + player.getTreasureCount() + "/" + treasures.length + ")";
                         }
@@ -117,17 +112,10 @@ public class Game{
                 grid.display();
                 System.out.println(message);
                 grid.gameover();
-                System.out.print("Would you like to play again? (y/n) ");
-                if (!sc.nextLine().equals("y")) {
-                    break;
-                }
-                initialize(size);
-                turn = 1;
+                break;
             }
 
         }
-        System.out.println("Come again soon!");
-        sc.close(); 
     }
 
     public void initialize(int size){
@@ -136,26 +124,9 @@ public class Game{
         grid = new Grid(size);
         player = new Player(1, 1);
         grid.placeSprite(player);
-        randomizeBoard(3, 2);
 
-        // // creates new enemies and places them on the board
-        // enemies = new Enemy[2];
-        // enemies[0] = new Enemy(3, 4);
-        // enemies[1] = new Enemy(5, 0, 2);
-        // for (Enemy each : enemies) {
-        //     grid.placeSprite(each);
-        // }
-
-
-        // // creates new treasures and places them on the board
-        // treasures = new Treasure[2];
-        // treasures[0] = new Treasure(4, 1);
-        // treasures[1] = new Treasure(0, 7);
-        // for (Treasure each : treasures) {
-        //     grid.placeSprite(each);
-        // }
-        // // adds the trophy to the board
-        // grid.placeSprite(new Trophy(6, 6));
+        // calls randomizeBoard to randomly place all sprites
+        randomizeBoard(4, 3);
 
         clearScreen();
         grid.display();
@@ -165,16 +136,21 @@ public class Game{
         message = n;
     }
 
+    // randomizes the position of all board objects
     public void randomizeBoard(int numEnemies, int numTreasures) {
         enemies = new Enemy[numEnemies];
         treasures = new Treasure[numTreasures];
+        // repeats to fill the enemy list
         for (int i = 0; i < numEnemies; i++) {
+            // sets the row and col values to random numbers
             int row = (int) (Math.random() * size);
             int col = (int) (Math.random() * size);
+            // repeats until an empty space is found
             while (!(grid.getGrid()[row][col] instanceof Dot)) {
                 row = (int) (Math.random() * size);
                 col = (int) (Math.random() * size);
-            } 
+            }
+            // places an enemy with double speed on the first iteration
             if (i == 0) {
                 enemies[i] = new Enemy(size - row - 1, col, 2);
             } else {
@@ -183,6 +159,7 @@ public class Game{
             grid.placeSprite(enemies[i]);
         }
 
+        // runs once more than numTreasures to add the trophy as well
         for (int i = 0; i <= numTreasures; i++) {
             int row = (int) (Math.random() * size);
             int col = (int) (Math.random() * size);
@@ -190,6 +167,7 @@ public class Game{
                 row = (int) (Math.random() * size);
                 col = (int) (Math.random() * size);
             } 
+            // adds the trophy instead of a treasure on the last iteration
             if (i == numTreasures) {
                 trophy = new Trophy(size - row - 1, col);
                 grid.placeSprite(trophy);
@@ -202,6 +180,26 @@ public class Game{
 
 
     public static void main(String[] args) {
-        Game myGame = new Game(8);
+        // prints instructions
+        clearScreen();
+        System.out.println("Welcome to the Treasure Hunt Game!");
+        System.out.println("----------------------------------------------");
+        System.out.println("Your task is to collect all the treasures without dying.");
+        System.out.println("Every 3 turns, the enemies will move towards you.");
+        System.out.println("The number an enemy is displayed as represents its move distance.");
+        System.out.println("If you are hit by or run into an enemy, you will lose a life.");
+        System.out.println("When you collect all treasures and reach the win tile, you win");
+        System.out.println("----------------------------------------------");
+        System.out.print("Good Luck! (Press Enter to Continue) ");
+        sc.nextLine();
+        while (true) {
+            Game myGame = new Game(10);
+            System.out.print("Would you like to play again? (y/n) ");
+            if (!sc.nextLine().equals("y")) {
+                break;
+            }
+        }
+        System.out.println("Come again soon!");
+        sc.close();
     }
 }
