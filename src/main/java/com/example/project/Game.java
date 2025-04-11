@@ -11,8 +11,8 @@ public class Game{
     private int size;
     private String message;
 
-    public Game(int size){ //the constructor should call initialize() and play()
-        initialize(size);
+    public Game(int diff){ //the constructor should call initialize() and play()
+        initialize(diff);
         play();
     }
 
@@ -33,7 +33,7 @@ public class Game{
     }
 
     public void play(){ //write your game logic here
-        int turn = -1;
+        int turn = -2;
         // iterates until the loop is broken
         while(true){
             // declares a message variable that will be altered and displayed based on the events of the turn
@@ -118,15 +118,21 @@ public class Game{
         }
     }
 
-    public void initialize(int size){
-        // initializes the grid and places the player
-        this.size = size;
-        grid = new Grid(size);
-        player = new Player(1, 1);
-        grid.placeSprite(player);
-
-        // calls randomizeBoard to randomly place all sprites
-        randomizeBoard(4, 3);
+    public void initialize(int diff){
+        // initializes the grid calls randomizeBoard with values based on difficulty
+        if (diff == 1) {
+            size = 7;
+            grid = new Grid(size);
+            randomizeBoard(2, 1);
+        } else if (diff == 2) {
+            size = 8;
+            grid = new Grid(size);
+            randomizeBoard(3, 2);
+        } else {
+            size = 8;
+            grid = new Grid(size);
+            randomizeBoard(5, 4);
+        }
 
         clearScreen();
         grid.display();
@@ -140,8 +146,9 @@ public class Game{
     public void randomizeBoard(int numEnemies, int numTreasures) {
         enemies = new Enemy[numEnemies];
         treasures = new Treasure[numTreasures];
-        // repeats to fill the enemy list
-        for (int i = 0; i < numEnemies; i++) {
+        
+        // repeats to fill the enemy list (and initialize the player)
+        for (int i = 0; i <= numEnemies; i++) {
             // sets the row and col values to random numbers
             int row = (int) (Math.random() * size);
             int col = (int) (Math.random() * size);
@@ -153,10 +160,15 @@ public class Game{
             // places an enemy with double speed on the first iteration
             if (i == 0) {
                 enemies[i] = new Enemy(size - row - 1, col, 2);
+                grid.placeSprite(enemies[i]);
+            // initializes the player on last loop
+            } else if (i == numEnemies) {
+                player = new Player(size - row - 1, col);
+                grid.placeSprite(player);
             } else {
                 enemies[i] = new Enemy(size - row - 1, col);
+                grid.placeSprite(enemies[i]);
             }
-            grid.placeSprite(enemies[i]);
         }
 
         // runs once more than numTreasures to add the trophy as well
@@ -193,7 +205,18 @@ public class Game{
         System.out.print("Good Luck! (Press Enter to Continue) ");
         sc.nextLine();
         while (true) {
-            Game myGame = new Game(10);
+            clearScreen();
+            System.out.println("Difficulty Options");
+            System.out.println("1) Easy - 2 Enemies, 1 Treasure, 7x7 Grid");
+            System.out.println("2) Medium - 3 Enemies, 2 Treasure, 8x8 Grid");
+            System.out.println("3) Hard - 5 Enemies, 4 Treasure, 8x8 Grid");
+            System.out.println("----------------------------------------------");
+            System.out.print("Select Difficulty: ");
+            int difficulty = sc.nextInt();
+            if (difficulty > 3 || difficulty < 1) {
+                difficulty = 1;
+            }
+            Game myGame = new Game(difficulty);
             System.out.print("Would you like to play again? (y/n) ");
             if (!sc.nextLine().equals("y")) {
                 break;
