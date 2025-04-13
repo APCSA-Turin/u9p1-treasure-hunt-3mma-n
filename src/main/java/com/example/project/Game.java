@@ -80,7 +80,7 @@ public class Game{
                         player.move(direction);
                         grid.placeSprite(player, direction);
 
-                        // displays a message based on what the player interacted with
+                        // checks if the game should end based on the player winning
                         if (target instanceof Trophy) {
                             clearScreen();
                             grid.display();
@@ -90,7 +90,7 @@ public class Game{
                             message = "Obtained 1 Treasure! (" + player.getTreasureCount() + "/" + treasures.length + ")";
                         }
                     } else {
-                        // displays a message based on what the player interacted with
+                        // sets a message based on what the player interacted with
                         if (target instanceof Enemy) {
                             message = "You ran into an enemy! " + player.getLives() + " lives remain.";
                         } else {
@@ -98,15 +98,18 @@ public class Game{
                         }
                     }
                 } else {
-                    // displays a message (runs if the player tries to move out of bounds)
+                    // sets a message (runs if the player tries to move out of bounds)
                     message = "You cannot move that way.";
                 }
             }
             clearScreen();
             grid.display();
+            // prints a message if one has been set (based on events of the turn)
+            // the message is stored and only printed here so that it will be printed after the grid updates and prints
             if (!message.equals("")) {
                 System.out.println(message);
             }
+            // checks if the game should end based on the player running out of lives
             if (player.getLives() <= 0) {
                 clearScreen();
                 grid.display();
@@ -204,7 +207,9 @@ public class Game{
         System.out.println("----------------------------------------------");
         System.out.print("Good Luck! (Press Enter to Continue) ");
         sc.nextLine();
+        // runs until the player chooses to break the loop
         while (true) {
+            // allows the player to select a difficulty
             clearScreen();
             System.out.println("Difficulty Options");
             System.out.println("1) Easy - 2 Enemies, 1 Treasure, 7x7 Grid");
@@ -213,12 +218,16 @@ public class Game{
             System.out.println("----------------------------------------------");
             System.out.print("Select Difficulty: ");
             int difficulty = sc.nextInt();
+            // ensures the difficulty is between 1-3
             if (difficulty > 3 || difficulty < 1) {
                 difficulty = 1;
             }
+            // creates a new instance of Game (WITH THE PARAMETER DIFFICULTY, NOT SIZE)
             Game myGame = new Game(difficulty);
+            // prompts the player to play again after the game is ended
             System.out.print("Would you like to play again? (y/n) ");
             if (!sc.nextLine().equals("y")) {
+                // breaks the loop if the player chooses to quit
                 break;
             }
         }
