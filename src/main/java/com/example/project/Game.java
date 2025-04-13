@@ -162,14 +162,14 @@ public class Game{
             }
             // places an enemy with double speed on the first iteration
             if (i == 0) {
-                enemies[i] = new Enemy(size - row - 1, col, 2);
+                enemies[i] = new Enemy(col, size - row - 1, 2);
                 grid.placeSprite(enemies[i]);
             // initializes the player on last loop
             } else if (i == numEnemies) {
-                player = new Player(size - row - 1, col);
+                player = new Player(col, size - row - 1);
                 grid.placeSprite(player);
             } else {
-                enemies[i] = new Enemy(size - row - 1, col);
+                enemies[i] = new Enemy(col, size - row - 1);
                 grid.placeSprite(enemies[i]);
             }
         }
@@ -184,10 +184,10 @@ public class Game{
             } 
             // adds the trophy instead of a treasure on the last iteration
             if (i == numTreasures) {
-                trophy = new Trophy(size - row - 1, col);
+                trophy = new Trophy(col, size - row - 1);
                 grid.placeSprite(trophy);
             } else {
-                treasures[i] = new Treasure(size - row - 1, col);
+                treasures[i] = new Treasure(col, size - row - 1);
                 grid.placeSprite(treasures[i]);
             }
         }
